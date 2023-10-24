@@ -1,0 +1,24 @@
+apiVersion: wishapp.crossplane.io/v1alpha1
+kind: Frontend
+metadata:
+  name: test
+spec:
+  forProvider:
+    partOf: busybox
+    image: "busybox"
+    tag: "latest"
+    command: ["/bin/sh"]
+    args: ["-c", "while true; do echo hello; sleep 1000;done"]
+    cpu: 100m
+    mem: 200Mi
+    cpuMax: 200m
+    memMax: 500Mi
+    port: 8080
+    deployment:
+      namespace: test
+      replica: 1
+      deploymentAnnotations:
+        reloader.stakater.com/auto: "true"
+      lifecyclePreStopExeCommand: [ "sleep","10" ]
+  providerConfigRef:
+    name: qa

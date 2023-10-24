@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: busubox-test
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+  annotations:
+    testapp.crossplane.io/description: ""
+    testapp.crossplane.io/codeRepo: ""
+    testapp.crossplane.io/owner: ""
+    testapp.crossplane.io/lifecycle: ""
+spec:
+  project: test
+  source:
+    repoURL: git@github.com:neilcx/gitops.git
+    path: components/busybox-test
+    targetRevision: main
+  destination:
+    name: in-cluster
+    namespace: test
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - ApplyOutOfSyncOnly=true
+      - PruneLast=true
+      - RespectIgnoreDifferences=true     
